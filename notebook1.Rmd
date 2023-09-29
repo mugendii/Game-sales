@@ -28,5 +28,62 @@ mean(df$critic_score)
 ```
 Question 4
 Which genre has the highest average (mean) sales?
+```{r}
+#get the value counts for the genre
+table(df$genre)
+```
+
+```{r}
+new_df <- df # Duplicate the data
+new_df$genre_mean <- ave(df$sales,df$genre) #Get the mean of the genres and save in a new column
+new_df
+```
+
+```{r}
+max_mean_sales <-max(new_df$genre_mean) #Get the max average
+max_mean_sales
+```
+```{r}
+max_genre <- new_df$genre_mean == max_mean_sales
+Identify_rows <- new_df[max_genre,]
+Identify_rows
+```
+hence the genre is platform
 
 
+
+Question 5
+What’s the average (mean) critic score for games developed by EA?
+```{r}
+#get the value counts for the developer
+table(df$developer)
+```
+```{r}
+df2 <- df # duplicate the dataframe
+#filter the rows for games developed by EA
+Developed_by_EA <- df2$developer == "EA"
+Rows <- df2[Developed_by_EA,]
+Rows
+
+
+```
+```{r}
+#get the mean critic score
+mean(Rows$critic_score)
+```
+Question 6
+Create a new variable modern, which is equal to ‘yes’ when the year published is greater 
+than or equal to 2000, and is equal to ‘no’ when the year published is less than 2000.
+```{r}
+df3 <- df #Duplicate the dataframe
+Above_2000 <- df3$year_of_release >= 2000 # create the vector for year of release tha is greater than 2000
+
+```
+```{r}
+df3$modern <- Above_2000
+df3$modern <- factor(df3$modern, levels = c("TRUE","FALSE"), labels = c("yes","no"))
+df3
+```
+
+Question 7
+Replace ‘Other’ in publisher and developer with a missing value.
