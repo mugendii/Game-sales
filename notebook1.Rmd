@@ -7,7 +7,7 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
-Question 1
+##Question 1
 Read the dataset ‘game_sales.csv’ into R and assign to a variable called df.
 ```{r}
 # check the working directory
@@ -16,17 +16,17 @@ getwd()
 df <- read.csv("game_sales.csv", header = TRUE,sep = ",")
 df
 ```
-Question 2
+##Question 2
 What was the highest number of sales seen in the dataset?
 ```{r}
 max(df$sales)
 ```
-Question 3
+##Question 3
 What was the average (mean) critic score?
 ```{r}
 mean(df$critic_score)
 ```
-Question 4
+##Question 4
 Which genre has the highest average (mean) sales?
 ```{r}
 #get the value counts for the genre
@@ -52,7 +52,7 @@ hence the genre is platform
 
 
 
-Question 5
+##Question 5
 What’s the average (mean) critic score for games developed by EA?
 ```{r}
 #get the value counts for the developer
@@ -71,7 +71,7 @@ Rows
 #get the mean critic score
 mean(Rows$critic_score)
 ```
-Question 6
+##Question 6
 Create a new variable modern, which is equal to ‘yes’ when the year published is greater 
 than or equal to 2000, and is equal to ‘no’ when the year published is less than 2000.
 ```{r}
@@ -85,5 +85,91 @@ df3$modern <- factor(df3$modern, levels = c("TRUE","FALSE"), labels = c("yes","n
 df3
 ```
 
-Question 7
+##Question 7
 Replace ‘Other’ in publisher and developer with a missing value.
+```{r}
+df4 <- df #Duplicate the dataframe
+table(df4$developer)
+```
+```{r}
+table(df4$publisher)
+```
+Hence no Entries of "other" in the developer column
+```{r}
+Published_by_Other <- df4$publisher == "Other"
+null_rows <- df4[Published_by_Other,]
+null_rows
+
+```
+```{r}
+df4[df4$publisher == "Other",] <- NA
+table(df4$publisher)
+```
+##Question 8
+Find the average (mean) user score for games with a critic score greater than or equal to 
+80, and for games with a critic score less than 80. Only include games published in the year 
+2000 and later.
+```{r}
+#I had created a vector for rows where year of release is greater than 2000
+df5<- df[Above_2000,]
+df5
+```
+```{r}
+average_user_score_high_critic <- mean(df5$user_score[df5$critic_score >= 80])
+average_user_score_high_critic
+```
+```{r}
+average_user_score_low_critic <- mean(df5$user_score[df5$critic_score < 80])
+average_user_score_low_critic
+```
+##Question 9
+For each rating (E, E10+, T and M), find the most common genre.
+```{r}
+table(df$rating)
+```
+```{r}
+library(dplyr)
+```
+```{r}
+# Group the data by rating and calculate the mode (most common genre)
+mode_genre_by_rating <- df %>%
+  group_by(rating) %>%
+  summarize(mode_genre = names(sort(table(genre), decreasing = TRUE)[1]))
+  #we calculate the mode (most common genre) using the table function, which counts the frequency of each genre, and then we use sort to sort the table in decreasing     order
+# Print the result
+print(mode_genre_by_rating)
+```
+##Question 10
+Find the average (mean) critic score in each genre, for genres where we have at least 100 
+games. Arrange from highest average critic score to lowest.
+```{r}
+table(df$genre)
+```
+```{r}
+#sort the value counts
+mode_genre <- sort(table(df$genre), decreasing = TRUE)
+mode_genre
+```
+
+I'll find mean critic score for the following genres
+-Sports
+-Action
+-Racing
+-Shooter
+-Fighting
+-Misc
+```{r}
+Valid_genre <- mode_genre>= 100
+df6 <- df[Valid_genre,]
+df6
+```
+
+```{r}
+library(dplyr)
+# Group the data by genre and calculate the mean critic score
+mean_critic_by_genre <- df6 %>%
+  group_by(genre) %>%
+   summarize(mean_critic = names(sort(mean(df6$critic_score), decreasing = TRUE)[1]))
+print(mean_critic_by_genre)
+```
+
