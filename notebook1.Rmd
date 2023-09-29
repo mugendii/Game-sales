@@ -1,0 +1,32 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+Question 1
+Read the dataset ‘game_sales.csv’ into R and assign to a variable called df.
+```{r}
+# check the working directory
+getwd()
+
+df <- read.csv("game_sales.csv", header = TRUE,sep = ",")
+df
+```
+Question 2
+What was the highest number of sales seen in the dataset?
+```{r}
+max(df$sales)
+```
+Question 3
+What was the average (mean) critic score?
+```{r}
+mean(df$critic_score)
+```
+Question 4
+Which genre has the highest average (mean) sales?
+
+
