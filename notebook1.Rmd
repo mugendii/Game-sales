@@ -160,16 +160,20 @@ I'll find mean critic score for the following genres
 -Misc
 ```{r}
 Valid_genre <- mode_genre>= 100
-df6 <- df[Valid_genre,]
-df6
+Valid_genre
+```
+```{r}
+library(dplyr)
+df7 <- df %>% 
+  group_by(genre) %>% 
+  filter(n() >= 100)
 ```
 
 ```{r}
 library(dplyr)
 # Group the data by genre and calculate the mean critic score
-mean_critic_by_genre <- df6 %>%
+mean_critic_by_genre <- df7 %>%
   group_by(genre) %>%
-   summarize(mean_critic = names(sort(mean(df6$critic_score), decreasing = TRUE)[1]))
+   summarize(mean_critic_by_genre = names(sort(mean(df7$critic_score), decreasing = TRUE)[1]))
 print(mean_critic_by_genre)
 ```
-
